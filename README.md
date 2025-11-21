@@ -1,5 +1,7 @@
 ## 開発者向け案内
 
+この拡張機能は Google Meet で画面共有して発表する際などに、チャットのコメントをニコニコ動画風に流すツールになります。
+
 ### local で試す方法
 
 この Project を clone します。
@@ -17,7 +19,29 @@
 
 ### 2025/11/21 時点での動作方法
 
-### 一人で確認する方法
+まず適当に Google Meet を一つ開きます。一人で動作確認する場合は別アカウント、別デバイスで Meet に入ります。
+
+右上の拡張機能を ON にします。色と大きさを選択できます。
+
+<img width="361" height="394" alt="image" src="https://github.com/user-attachments/assets/2342695f-0564-4d3c-9e36-79d7a06e6328" />
+
+<img width="362" height="206" alt="image" src="https://github.com/user-attachments/assets/8d0a338a-d9e5-415c-b9d0-68a3451e3f61" />
+
+注意点として Meet の画面上でチャット欄を開いている状態にする必要があります（おそらく DOM が読み込めなくなるため）
+
+この時点でチャットを送信すると、Meet 画面上に流れるようになります。
+
+下記画像のように、Meet の画面と発表画面を別ウィンドウにして表示します。
+
+この状態で画面共有 → 発表画面に focus することで発表画面の Chrome ウィンドウ上に流れるようになります。
+focus している Chrome ウィンドウ上に流れます。
+
+<img width="2540" height="1395" alt="image" src="https://github.com/user-attachments/assets/c4f23de2-f9a6-4097-bfab-bd714ee59254" />
+
+他にも、色々な諸条件で動いたり動かなかったりするので留意ください。その際は色々なパターンで試してみてください。（要メンテ）
+例えば Meet のコメント欄が Pop up した場合が動かないなど。
+
+最終目標は拡張機能を公開して誰でも簡単に利用できるようにすること。
 
 <details>
 
