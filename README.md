@@ -1,3 +1,28 @@
+## 開発者向け案内
+
+### local で試す方法
+
+この Project を clone します。
+
+`npm install`
+
+`npm run build`
+
+これにより、`/dist`が作成されます。
+
+`chrome://extensions/` = 拡張機能管理ページを開き、右上の「デベロッパー モード」ボタンを ON
+
+「パッケージ化されていない拡張機能を読みこむ」にて`/dist`フォルダーを選択。
+これにより拡張機能が有効化されます。
+
+### 2025/11/21 時点での動作方法
+
+### 一人で確認する方法
+
+<details>
+
+<summary>Fork元のreadme</summary>
+
 # Google Meet Comment Flow
 
 ## 👀 Features
@@ -55,3 +80,5 @@ This extension is inspired by the extensions below.
 
 - [NicoStyleMeet](https://github.com/Yeq6X/NicoStyleMeet)
 - [NicoNicoStyle4MeetChromeExtension](https://github.com/Z-me/NicoNicoStyle4MeetChromeExtension)
+
+</details>
