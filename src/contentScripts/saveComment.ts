@@ -3,15 +3,11 @@ import { decodeHTMLSpecialWord } from "./utils/decodeHTMLSpecialWord";
 let prevThread: Node;
 let lastMessageId: string = "";
 
-// チャットパネル全体
-const CHAT_SELECTOR_BASE = 'div[jsname="b0t70b"].WUFI9b';
-
 const CHAT_SELECTOR_OBJ = {
-  container: CHAT_SELECTOR_BASE,
   // スレッド（コメントのリスト）
   thread: 'div[jsname="xySENc"].Ge9Kpc.z38b6',
   // 個別のコメント
-  message: 'div[jsname="dTKtvb"]',
+  messageNodes: 'div[jsname="dTKtvb"]',
 } as const;
 
 const extractMessageFromThread = (
@@ -23,7 +19,7 @@ const extractMessageFromThread = (
 
   prevThread = thread.cloneNode(true);
 
-  const messageNodes = thread.querySelectorAll(CHAT_SELECTOR_OBJ.message);
+  const messageNodes = thread.querySelectorAll(CHAT_SELECTOR_OBJ.messageNodes);
 
   if (messageNodes.length === 0) return;
 
@@ -61,9 +57,7 @@ const observer = new MutationObserver(async (mutations: MutationRecord[]) => {
 
     if (!isEnabledStreaming) return;
 
-    const container = document.querySelector(CHAT_SELECTOR_OBJ.container);
     const thread = document.querySelector(CHAT_SELECTOR_OBJ.thread);
-
     const message = extractMessageFromThread(thread)
 
     if (!message) return;
