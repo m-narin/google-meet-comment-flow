@@ -1,7 +1,6 @@
 import { decodeHTMLSpecialWord } from "./utils/decodeHTMLSpecialWord";
 
 let prevThread: Node;
-let prevPopupThread: Node;
 let lastMessageId: string = "";
 
 // チャットパネル全体
@@ -34,11 +33,8 @@ const extractMessageFromThread = (
   const messageNode = messageNodes[messageNodes.length - 1];
   console.log("[saveComment] Latest message node:", messageNode);
 
-  // jsname="dTKtvb"の中の最初の<div>を取得
-  // TODO: リンクの場合innerDivがさらにネストされる場合があるので対応が必要
-  const innerDiv = messageNode.querySelector("div");
-  const messageText = innerDiv ? innerDiv.innerHTML : messageNode.innerHTML;
-  console.log("[saveComment] Message innerHTML:", messageText);
+  const messageText = messageNode.textContent || "";
+  console.log("[saveComment] Message text:", messageText);
 
   // 同じメッセージを重複して送信しないようにチェック
   if (messageText === lastMessageId) {
