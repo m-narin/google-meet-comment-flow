@@ -1,7 +1,6 @@
 import { decodeHTMLSpecialWord } from "./utils/decodeHTMLSpecialWord";
 
 let prevThread: Node;
-let prevPopupThread: Node;
 let lastMessageId: string = "";
 
 // チャットパネル全体
@@ -14,38 +13,6 @@ const CHAT_SELECTOR_OBJ = {
   // 個別のコメント
   message: 'div[jsname="dTKtvb"]',
 } as const;
-
-const CHAT_CLASS_OBJ = {
-  isHidden: "qdulke",
-} as const;
-
-// ポップアップチャット用（別ウィンドウで開いた場合）
-const POPUP_SELECTOR_BASE = 'div.fJsklc.nulMpf.Didmac';
-
-const POPUP_SELECTOR_OBJ = {
-  container: POPUP_SELECTOR_BASE,
-  thread: `${POPUP_SELECTOR_BASE} div.mIw6Bf`,
-  // ポップアップでも同じコメント要素
-  message: 'div[jsname="dTKtvb"]',
-} as const;
-
-const extractMessageFromPopupThread = (
-  popupThread: Element | null
-): string | undefined => {
-  if (!popupThread || popupThread.isEqualNode(prevPopupThread)) return;
-
-  prevPopupThread = popupThread.cloneNode(true);
-
-  const messageNodes = popupThread.querySelectorAll(POPUP_SELECTOR_OBJ.message);
-
-  if (messageNodes.length === 0) return;
-
-  const messageNode = messageNodes[messageNodes.length - 1];
-
-  // jsname="dTKtvb"の中の最初の<div>を取得
-  const innerDiv = messageNode.querySelector("div");
-  return innerDiv ? innerDiv.innerHTML : messageNode.innerHTML;
-};
 
 const extractMessageFromThread = (
   thread: Element | null
@@ -66,10 +33,8 @@ const extractMessageFromThread = (
   const messageNode = messageNodes[messageNodes.length - 1];
   console.log("[saveComment] Latest message node:", messageNode);
 
-  // jsname="dTKtvb"の中の最初の<div>を取得
-  const innerDiv = messageNode.querySelector("div");
-  const messageText = innerDiv ? innerDiv.innerHTML : messageNode.innerHTML;
-  console.log("[saveComment] Message innerHTML:", messageText);
+  const messageText = messageNode.textContent || "";
+  console.log("[saveComment] Message text:", messageText);
 
   // 同じメッセージを重複して送信しないようにチェック
   if (messageText === lastMessageId) {
@@ -101,18 +66,13 @@ const observer = new MutationObserver(async (mutations: MutationRecord[]) => {
 
     if (!isEnabledStreaming) return;
 
-    const popupThread = document.querySelector(POPUP_SELECTOR_OBJ.thread);
     const container = document.querySelector(CHAT_SELECTOR_OBJ.container);
     const thread = document.querySelector(CHAT_SELECTOR_OBJ.thread);
 
     console.log("[saveComment] container:", container);
     console.log("[saveComment] thread:", thread);
-    console.log("[saveComment] popupThread:", popupThread);
 
-    const message =
-      container && !container.classList.contains(CHAT_CLASS_OBJ.isHidden)
-        ? extractMessageFromThread(thread)
-        : extractMessageFromPopupThread(popupThread);
+    const message = extractMessageFromThread(thread)
 
     console.log("[saveComment] Extracted message:", message);
 
