@@ -19,7 +19,8 @@
 
 ### 動作方法
 
-まず適当に Google Meet を一つ開きます。一人で動作確認する場合は別アカウント、別デバイスで Meet に入ります。
+まず適当に Google Meet を一つ開きます。
+Google Meet の画面を起動するとデフォルトで有効化されるようになっています。
 
 右上の拡張機能設定から色と大きさを選択できます。
 
@@ -27,8 +28,12 @@
 
 <img width="362" height="206" alt="image" src="https://github.com/user-attachments/assets/8d0a338a-d9e5-415c-b9d0-68a3451e3f61" />
 
-チャットを送信すると、focus している画面上に流れるようになります。
+動作のためには、チャット欄を一回開く必要があります。チャット欄を一度開くことで初めてコメントの DOM が反映されるようです。
 
+ここでコメントを送信すると、focus している画面上に流れるようになります。
+チャット欄が Pop up の場合でも動作します。
+
+一人で動作確認する場合は別アカウント、別デバイスで Meet に入り、他人としてコメントを再現すると良いでしょう。
 <img width="2540" height="1395" alt="image" src="https://github.com/user-attachments/assets/c4f23de2-f9a6-4097-bfab-bd714ee59254" />
 
 <details>
