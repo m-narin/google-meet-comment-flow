@@ -9,6 +9,10 @@ const CHAT_SELECTOR_OBJ = {
   messageNodes: 'div[jsname="dTKtvb"]',
 } as const;
 
+const POPUP_SELECTOR_OBJ = {
+  messageNodes: `div.huGk4e`,
+} as const;
+
 const extractMessageFromThread = (
   thread: Element | null
 ): string | undefined => {
@@ -32,7 +36,6 @@ const extractMessageFromThread = (
 // FIX: 自分で一つコメントした場合、二回triggerが走ってしまうので二回流れてしまう。
 // 他人のコメントの場合は一回しか走らないので問題ない。
 const observer = new MutationObserver(async (mutations: MutationRecord[]) => {
-  console.log("[saveComment] MutationObserver triggered", Date.now());
   try {
     const addedNode = mutations[0].addedNodes?.[0];
 
@@ -50,8 +53,16 @@ const observer = new MutationObserver(async (mutations: MutationRecord[]) => {
 
     if (!isEnabledStreaming) return;
 
+    const popupMessageNodes = document.querySelectorAll(POPUP_SELECTOR_OBJ.messageNodes);
+
     const thread = document.querySelector(CHAT_SELECTOR_OBJ.thread);
-    const message = extractMessageFromThread(thread)
+    let message: string | undefined;
+
+    if (popupMessageNodes.length > 0) {
+      message = popupMessageNodes[popupMessageNodes.length - 1].textContent || "";
+    } else {
+      message = extractMessageFromThread(thread)
+    }
 
     if (!message) return;
 
@@ -69,17 +80,9 @@ const observer = new MutationObserver(async (mutations: MutationRecord[]) => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-  // 不要な発火を防ぐため、監視対象DOMをThreadに限定する
-  const checkThread = setInterval(() => {
-    const thread = document.querySelector(CHAT_SELECTOR_OBJ.thread);
-    if (thread) {
-      clearInterval(checkThread);
-        observer.observe(thread, {
-        subtree: true,
-        childList: true,
-      });
-      console.log("[saveComment] Started observing thread");
-    }
-  }, 100);
-});
+document.addEventListener("DOMContentLoaded", () =>
+  observer.observe(document.body, {
+    subtree: true,
+    childList: true,
+  })
+);
